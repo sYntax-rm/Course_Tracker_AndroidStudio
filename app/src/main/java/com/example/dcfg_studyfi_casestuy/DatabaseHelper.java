@@ -167,7 +167,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_TASKS, COL_TASK_ID + " = ?", new String[]{String.valueOf(taskId)});
     }
 
-
     // Playlist
     public long insertTrack(String title, String artist, String category,
                             String resRawName, int durationMs) {
