@@ -190,13 +190,8 @@ public class PlaylistActivity extends AppCompatActivity {
         });
     }
 
-    // ── Core playTrackAt ───────────────────────────────────────────────────
-    /**
-     * HOW AUDIO RESOLUTION WORKS:
-     *   track.resRawName = "lofi_track1"
-     *   getResources().getIdentifier("lofi_track1", "raw", packageName)
-     *   → R.raw.lofi_track1  (your file at app/src/main/res/raw/lofi_track1.mp3)
-     */
+    // ── Core playTrackAt
+
     private void playTrackAt(int index) {
         if (filteredTracks.isEmpty() || index < 0 || index >= filteredTracks.size()) return;
         TrackModel track = filteredTracks.get(index);
@@ -234,7 +229,6 @@ public class PlaylistActivity extends AppCompatActivity {
     private int getAudioRes(String name) {
         switch (name) {
             case "soft_piano": return R.raw.soft_piano;
-            case "bamboo_wind": return R.raw.bamboo_wind;
             case "chillhop_beats_lofi": return R.raw.chillhop_beats_lofi;
             case "midnight_study_lofi": return R.raw.midnight_study_lofi;
             case "forest_rain": return R.raw.forest_rain;
@@ -324,7 +318,6 @@ public class PlaylistActivity extends AppCompatActivity {
         dbHelper.insertTrack("Ocean Waves",      "Nature Sounds",  "chill",  "ocean_waves",  212000);
         dbHelper.insertTrack("Soft Piano Chill", "Calm Vibes",     "chill",  "soft_piano",  236000);
         dbHelper.insertTrack("Forest Rain",      "Ambient World",  "nature", "forest_rain", 1899000);
-        dbHelper.insertTrack("Bamboo Wind",      "Zen Studio",     "nature", "bamboo_wind", 1829000);
     }
 
     // ── Lifecycle
