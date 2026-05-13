@@ -33,12 +33,8 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".FocusTimerActivity"/>
+
         <activity android:name=".PlaylistActivity"/>
-
-
-
-
-
     </application>
 
 </manifest>

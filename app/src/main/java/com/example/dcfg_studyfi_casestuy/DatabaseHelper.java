@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Configuration (Pinalitan ko ang Version to 2 para mag-trigger ang onUpgrade)
     private static final String DATABASE_NAME = "StudyFi.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Table para sa Courses (Folders)
     private static final String TABLE_COURSES = "courses";
@@ -82,6 +82,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_TASK_NAME + " TEXT, " +
                     COL_TASK_STATUS + " INTEGER DEFAULT 0)";
             db.execSQL(createTableTasks);
+
+        }
+        if (oldVersion < 3) {
             String createTableTracks = "CREATE TABLE IF NOT EXISTS " + TABLE_TRACKS + " (" +
                     COL_TRACK_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_TRACK_TITLE    + " TEXT NOT NULL, " +
@@ -92,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ")";
             db.execSQL(createTableTracks);
         }
+
     }
 
     // ==================== COURSE METHODS ====================
