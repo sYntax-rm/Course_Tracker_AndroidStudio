@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DCFG_StudyFi_CaseStuy</string>
+    <string name="hello_placeholder">Hello, %s!</string>
+</resources>

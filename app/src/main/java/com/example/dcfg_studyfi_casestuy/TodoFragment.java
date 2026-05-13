@@ -1,0 +1,19 @@
+package com.example.dcfg_studyfi_casestuy;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class TodoFragment extends Fragment {
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Assuming fragment_todo.xml exists based on the provided recently edited files
+        return inflater.inflate(R.layout.fragment_todo, container, false);
+    }
+}
