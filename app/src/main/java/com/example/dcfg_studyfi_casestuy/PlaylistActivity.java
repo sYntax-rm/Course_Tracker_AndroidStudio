@@ -3,6 +3,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -80,6 +81,7 @@ public class PlaylistActivity extends AppCompatActivity {
 
     // ── Bind views ─────────────────────────────────────────────────────────
     private void bindViews() {
+
         tvCurrentTrackTitle  = findViewById(R.id.tvCurrentTrackTitle);
         tvCurrentTrackArtist = findViewById(R.id.tvCurrentTrackArtist);
         tvCurrentTime        = findViewById(R.id.tvCurrentTime);
@@ -200,7 +202,7 @@ public class PlaylistActivity extends AppCompatActivity {
         TrackModel track = filteredTracks.get(index);
         releasePlayer();
 
-        int resId = getResources().getIdentifier(track.resRawName, "raw", getPackageName());
+        int resId = getAudioRes(track.resRawName);
         if (resId == 0) {
             Toast.makeText(this,
                     "Missing file: res/raw/" + track.resRawName + ".mp3", Toast.LENGTH_LONG).show();
@@ -227,6 +229,19 @@ public class PlaylistActivity extends AppCompatActivity {
         startSeekUpdater();
         trackAdapter.setPlayingIndex(index);
         trackAdapter.notifyDataSetChanged();
+    }
+
+    private int getAudioRes(String name) {
+        switch (name) {
+            case "soft_piano": return R.raw.soft_piano;
+            case "bamboo_wind": return R.raw.bamboo_wind;
+            case "chillhop_beats_lofi": return R.raw.chillhop_beats_lofi;
+            case "midnight_study_lofi": return R.raw.midnight_study_lofi;
+            case "forest_rain": return R.raw.forest_rain;
+            case "ocean_waves": return R.raw.ocean_waves;
+            case "rainy_day_lofi": return R.raw.rainy_day_lofi;
+            default: return 0;
+        }
     }
 
     private void playNext() {
@@ -303,16 +318,16 @@ public class PlaylistActivity extends AppCompatActivity {
     private void seedTracksIfEmpty() {
         if (dbHelper.getTrackCount() > 0) return;
         // Replace resRawName values with your actual filenames in res/raw (no .mp3 extension)
-        dbHelper.insertTrack("Rainy Day Lofi",  "ChillHop Music", "lofi",   "lofi_track1",   180000);
-        dbHelper.insertTrack("Midnight Study",   "Lofi Girl",      "lofi",   "lofi_track2",   210000);
-        dbHelper.insertTrack("Coffee & Code",    "Chillhop Beats", "lofi",   "lofi_track3",   195000);
-        dbHelper.insertTrack("Ocean Waves",      "Nature Sounds",  "chill",  "chill_track1",  300000);
-        dbHelper.insertTrack("Soft Piano Chill", "Calm Vibes",     "chill",  "chill_track2",  240000);
-        dbHelper.insertTrack("Forest Rain",      "Ambient World",  "nature", "nature_track1", 360000);
-        dbHelper.insertTrack("Bamboo Wind",      "Zen Studio",     "nature", "nature_track2", 270000);
+        dbHelper.insertTrack("Rainy Day Lofi",  "ChillHop Music", "lofi",   "rainy_day_lofi",   140000);
+        dbHelper.insertTrack("Midnight Study",   "Lofi Girl",      "lofi",   "midnight_study_lofi",   1140000);
+        dbHelper.insertTrack("Coffee & Code",    "Chillhop Beats", "lofi",   "chillhop_beats_lofi",   207000);
+        dbHelper.insertTrack("Ocean Waves",      "Nature Sounds",  "chill",  "ocean_waves",  212000);
+        dbHelper.insertTrack("Soft Piano Chill", "Calm Vibes",     "chill",  "soft_piano",  236000);
+        dbHelper.insertTrack("Forest Rain",      "Ambient World",  "nature", "forest_rain", 1899000);
+        dbHelper.insertTrack("Bamboo Wind",      "Zen Studio",     "nature", "bamboo_wind", 1829000);
     }
 
-    // ── Lifecycle ──────────────────────────────────────────────────────────
+    // ── Lifecycle
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -320,9 +335,8 @@ public class PlaylistActivity extends AppCompatActivity {
         if (dbHelper != null) dbHelper.close();
     }
 
-    // ══════════════════════════════════════════════════════════════════════
     // TrackModel
-    // ══════════════════════════════════════════════════════════════════════
+
     public static class TrackModel {
         public int    id;
         public String title, artist, category, resRawName;
@@ -336,9 +350,9 @@ public class PlaylistActivity extends AppCompatActivity {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════
+
     // TrackAdapter
-    // ══════════════════════════════════════════════════════════════════════
+
     private class TrackAdapter extends ArrayAdapter<TrackModel> {
         private List<TrackModel> data;
         private int playingIndex = -1;
