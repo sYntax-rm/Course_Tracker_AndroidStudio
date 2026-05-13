@@ -56,6 +56,13 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 return true;
+            }else if(id == R.id.nav_playlist){
+                Intent intent = new Intent(HomeActivity.this,
+                        PlaylistActivity.class);
+
+                startActivity(intent);
+
+                return true;
             }
 
             Toast.makeText(HomeActivity.this, item.getTitle() + " Coming Soon!", Toast.LENGTH_SHORT).show();
