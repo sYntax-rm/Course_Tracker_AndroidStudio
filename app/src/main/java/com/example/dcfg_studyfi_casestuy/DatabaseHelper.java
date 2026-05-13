@@ -28,6 +28,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_TASK_NAME = "task_name";
     private static final String COL_TASK_STATUS = "is_completed";
 
+    // fOR THE PLAYLIST
+    private static final String TABLE_TRACKS      = "tracks";
+    private static final String COL_TRACK_ID      = "track_id";
+    private static final String COL_TRACK_TITLE   = "title";
+    private static final String COL_TRACK_ARTIST  = "artist";
+    private static final String COL_TRACK_CATEGORY= "category";
+    private static final String COL_TRACK_RES_RAW = "res_raw_name";
+    private static final String COL_TRACK_DURATION= "duration_ms";
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -48,6 +58,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_TASK_NAME + " TEXT, " +
                 COL_TASK_STATUS + " INTEGER DEFAULT 0)"; // 0 = False, 1 = True
         db.execSQL(createTableTasks);
+
+        String createTableTracks =
+                "CREATE TABLE " + TABLE_TRACKS + " (" +
+                        COL_TRACK_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COL_TRACK_TITLE    + " TEXT NOT NULL, " +
+                        COL_TRACK_ARTIST   + " TEXT, " +
+                        COL_TRACK_CATEGORY + " TEXT DEFAULT 'lofi', " +
+                        COL_TRACK_RES_RAW  + " TEXT NOT NULL, " +
+                        COL_TRACK_DURATION + " INTEGER DEFAULT 0" +
+                        ")";
+        db.execSQL(createTableTracks);
+
     }
 
     @Override
@@ -60,6 +82,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_TASK_NAME + " TEXT, " +
                     COL_TASK_STATUS + " INTEGER DEFAULT 0)";
             db.execSQL(createTableTasks);
+            String createTableTracks = "CREATE TABLE IF NOT EXISTS " + TABLE_TRACKS + " (" +
+                    COL_TRACK_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_TRACK_TITLE    + " TEXT NOT NULL, " +
+                    COL_TRACK_ARTIST   + " TEXT, " +
+                    COL_TRACK_CATEGORY + " TEXT DEFAULT 'lofi', " +
+                    COL_TRACK_RES_RAW  + " TEXT NOT NULL, " +
+                    COL_TRACK_DURATION + " INTEGER DEFAULT 0" +
+                    ")";
+            db.execSQL(createTableTracks);
         }
     }
 
@@ -135,4 +166,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TASKS, COL_TASK_ID + " = ?", new String[]{String.valueOf(taskId)});
     }
+
+
+    // Playlist
+    public long insertTrack(String title, String artist, String category,
+                            String resRawName, int durationMs) {
+        android.database.sqlite.SQLiteDatabase db = this.getWritableDatabase();
+        android.content.ContentValues values = new android.content.ContentValues();
+        values.put(COL_TRACK_TITLE,    title);
+        values.put(COL_TRACK_ARTIST,   artist);
+        values.put(COL_TRACK_CATEGORY, category);
+        values.put(COL_TRACK_RES_RAW,  resRawName);
+        values.put(COL_TRACK_DURATION, durationMs);
+        return db.insert(TABLE_TRACKS, null, values);
+    }
+
+    /** Returns all tracks ordered by category then title. */
+    public java.util.List<PlaylistActivity.TrackModel> getAllTracks() {
+        java.util.List<PlaylistActivity.TrackModel> list = new java.util.ArrayList<>();
+        android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();
+        android.database.Cursor cursor = db.query(
+                TABLE_TRACKS, null, null, null, null, null,
+                COL_TRACK_CATEGORY + " ASC, " + COL_TRACK_TITLE + " ASC"
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new PlaylistActivity.TrackModel(
+                        cursor.getInt   (cursor.getColumnIndexOrThrow(COL_TRACK_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_TRACK_TITLE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_TRACK_ARTIST)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_TRACK_CATEGORY)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_TRACK_RES_RAW)),
+                        cursor.getInt   (cursor.getColumnIndexOrThrow(COL_TRACK_DURATION))
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
+    /** Returns total number of tracks (used to avoid re-seeding). */
+    public int getTrackCount() {
+        android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();
+        android.database.Cursor cursor = db.rawQuery(
+                "SELECT COUNT(*) FROM " + TABLE_TRACKS, null
+        );
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+
+
+
 }
