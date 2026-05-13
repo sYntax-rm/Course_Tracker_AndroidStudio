@@ -8,18 +8,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * TimerProgressView — draws a smooth circular arc progress ring
- * Used by FocusTimerActivity as the visual timer ring.
- *
- * Usage in XML:
- *   <com.example.studytracker.TimerProgressView
- *       android:id="@+id/timerProgressView"
- *       android:layout_width="260dp"
- *       android:layout_height="260dp" />
- *
- * Call setProgress(0f–1f) and setProgressColor(int) from the Activity.
- */
+
 public class TimerProgressView extends View {
 
     private Paint trackPaint;

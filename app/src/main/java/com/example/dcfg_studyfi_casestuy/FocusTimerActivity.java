@@ -12,17 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * FocusTimerActivity — Pomodoro-style study timer
- *
- * Modes:  STUDY (default 25 min) → BREAK (5 min) → LONG BREAK (15 min)
- * Features:
- *  - Start / Pause / Reset / Skip
- *  - Auto-switch between study and break
- *  - Session counter + minutes tracked
- *  - Custom duration input
- *  - Progress ring via TimerProgressView
- */
+
 public class FocusTimerActivity extends AppCompatActivity {
 
     private static final int MODE_STUDY = 0;
@@ -43,7 +33,6 @@ public class FocusTimerActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;
 
-    // ── Views ──────────────────────────────────────────────────────────────
     private TextView        tvTimer, tvTimerLabel;
     private TextView        tvSessionCount, tvMinutesFocused, tvGoalCount;
     private Button          btnStartPause, btnModeStudy, btnModeBreak, btnModeLong;
@@ -70,7 +59,7 @@ public class FocusTimerActivity extends AppCompatActivity {
         resetTimer(false);
     }
 
-    // ── View binding ───────────────────────────────────────────────────────
+    // ── View binding
     private void bindViews() {
         tvTimer            = findViewById(R.id.tvTimer);
         tvTimerLabel       = findViewById(R.id.tvTimerLabel);

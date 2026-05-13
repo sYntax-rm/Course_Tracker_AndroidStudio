@@ -19,27 +19,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * PlaylistActivity — Study music player
- *
- * Audio  : res/raw MP3 files bundled in the app (offline, no internet needed)
- * Data   : SQLite via existing DatabaseHelper — tracks table added via DatabaseHelper_ADDITIONS
- *
- * Features:
- *  - Play / Pause / Next / Previous
- *  - Loop toggle  (single-track repeat)
- *  - Shuffle toggle
- *  - SeekBar with live time display (polls every 500ms)
- *  - Category chip filter: All / Lofi / Chill / Nature
- *  - Auto-advance to next track on completion
- *  - Highlighted currently-playing row in ListView
- */
 public class PlaylistActivity extends AppCompatActivity {
 
-    // ── DB ─────────────────────────────────────────────────────────────────
     private DatabaseHelper dbHelper;
 
-    // ── Track state ────────────────────────────────────────────────────────
+
     private List<TrackModel> allTracks      = new ArrayList<>();
     private List<TrackModel> filteredTracks = new ArrayList<>();
     private int     currentIndex    = -1;
@@ -47,14 +31,13 @@ public class PlaylistActivity extends AppCompatActivity {
     private boolean isLooping       = false;
     private boolean isShuffled      = false;
 
-    // ── MediaPlayer ────────────────────────────────────────────────────────
     private MediaPlayer mediaPlayer;
 
-    // ── SeekBar Handler ────────────────────────────────────────────────────
+
     private final Handler  seekHandler = new Handler(Looper.getMainLooper());
     private Runnable seekRunnable;
 
-    // ── Views ──────────────────────────────────────────────────────────────
+
     private TextView    tvCurrentTrackTitle, tvCurrentTrackArtist;
     private TextView    tvCurrentTime, tvTotalTime, tvAlbumEmoji;
     private ImageButton btnPlayPause, btnNext, btnPrevious;
@@ -64,7 +47,7 @@ public class PlaylistActivity extends AppCompatActivity {
     private TextView    chipAll, chipLofi, chipChill, chipNature;
     private TrackAdapter trackAdapter;
 
-    // ══════════════════════════════════════════════════════════════════════
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +83,7 @@ public class PlaylistActivity extends AppCompatActivity {
         chipNature           = findViewById(R.id.chipNature);
     }
 
-    // ── Load & filter tracks ───────────────────────────────────────────────
+    // ── Load & filter tracks
     private void loadTracks(String category) {
         allTracks      = dbHelper.getAllTracks();
         filteredTracks = filterByCategory(allTracks, category);
@@ -120,7 +103,7 @@ public class PlaylistActivity extends AppCompatActivity {
         return out;
     }
 
-    // ── Category chips ─────────────────────────────────────────────────────
+    // ── Category chips
     private void setupCategoryChips() {
         View.OnClickListener click = v -> {
             resetChipStyles();
@@ -146,7 +129,7 @@ public class PlaylistActivity extends AppCompatActivity {
         }
     }
 
-    // ── Playback controls ──────────────────────────────────────────────────
+    // ── Playback controls
     private void setupPlaybackControls() {
 
         btnPlayPause.setOnClickListener(v -> {
@@ -250,7 +233,7 @@ public class PlaylistActivity extends AppCompatActivity {
         playTrackAt(currentIndex);
     }
 
-    // ── SeekBar ────────────────────────────────────────────────────────────
+    // ── SeekBar
     private void setupSeekBar() {
         seekBarProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -284,7 +267,7 @@ public class PlaylistActivity extends AppCompatActivity {
         if (seekRunnable != null) seekHandler.removeCallbacks(seekRunnable);
     }
 
-    // ── Util ───────────────────────────────────────────────────────────────
+    // ── Util
     private String formatTime(int ms) {
         int s = ms / 1000;
         return String.format("%d:%02d", s / 60, s % 60);
@@ -308,10 +291,9 @@ public class PlaylistActivity extends AppCompatActivity {
         }
     }
 
-    // ── Seed sample data (first run only) ─────────────────────────────────
+
     private void seedTracksIfEmpty() {
         if (dbHelper.getTrackCount() > 0) return;
-        // Replace resRawName values with your actual filenames in res/raw (no .mp3 extension)
         dbHelper.insertTrack("Rainy Day Lofi",  "ChillHop Music", "lofi",   "rainy_day_lofi",   140000);
         dbHelper.insertTrack("Midnight Study",   "Lofi Girl",      "lofi",   "midnight_study_lofi",   1140000);
         dbHelper.insertTrack("Coffee & Code",    "Chillhop Beats", "lofi",   "chillhop_beats_lofi",   207000);

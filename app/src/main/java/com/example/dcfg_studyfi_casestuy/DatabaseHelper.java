@@ -184,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_TRACKS, null, values);
     }
 
-    /** Returns all tracks ordered by category then title. */
+
     public java.util.List<PlaylistActivity.TrackModel> getAllTracks() {
         java.util.List<PlaylistActivity.TrackModel> list = new java.util.ArrayList<>();
         android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();
@@ -208,7 +208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    /** Returns total number of tracks (used to avoid re-seeding). */
+
     public int getTrackCount() {
         android.database.sqlite.SQLiteDatabase db = this.getReadableDatabase();
         android.database.Cursor cursor = db.rawQuery(
